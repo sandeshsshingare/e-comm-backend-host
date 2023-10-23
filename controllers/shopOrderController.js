@@ -225,7 +225,7 @@ const orderInvoice = asyncErrorHandler(async (req, res, next) => {
   fs.readFile(filePath, "utf-8", async (err, html) => {
     let content = hbs.compile(html)({ order: data });
 
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     await page.setContent(content);
