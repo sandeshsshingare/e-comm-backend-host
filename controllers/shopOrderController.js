@@ -183,10 +183,10 @@ const getSpecificOrder = asyncErrorHandler(async (req, res, next) => {
 
 const cancelOrder = asyncErrorHandler(async (req, res, next) => {
   const orderId = req.params.orderId;
-
+  let orderData = await indexModel.Order.findById(orderId)
   const updatedData = await indexModel.Order.findByIdAndUpdate(orderId, {
     status: "Cancelled",
-    paymentStatus: "Refunded",
+    paymentStatus: orderData.paymentStatus==="Paid" ? "Refunded": 'Pending',
   });
   res.status(200).json({
     message: "Order cancelled successfully",
