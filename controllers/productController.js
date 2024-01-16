@@ -1,5 +1,5 @@
 const asyncErrorHandler = require("../utils/asyncErrorHandler");
-const indexModel= require('./../models/indexModels')
+const indexModel = require("./../models/indexModels");
 const path = require("path");
 const fs = require("fs");
 const Apifeatures = require("./../utils/ApiFeatures");
@@ -12,10 +12,14 @@ const cloudinary = require("cloudinary").v2;
 const createProduct = asyncErrorHandler(async (req, res, next) => {
   const tokenObj = req.tokenObj;
   console.log(tokenObj);
-  const seller = await indexModel.SellerAuth.findOne({ _id: new ObjectId(tokenObj.id) });
+  const seller = await indexModel.SellerAuth.findOne({
+    _id: new ObjectId(tokenObj.id),
+  });
 
   console.log(seller);
-  const org = await indexModel.Organization.findOne({ _id: new ObjectId(seller._org) });
+  const org = await indexModel.Organization.findOne({
+    _id: new ObjectId(seller._org),
+  });
 
   const { name, description, price, category = "" } = req.body;
   console.log(category);
@@ -60,7 +64,9 @@ const getOneProduct = asyncErrorHandler(async (req, res, next) => {
     console.log("deal length", productData.deals.length);
     let flag = false;
     for (let J = length - 1; J >= 0; J--) {
-      const dealData = await indexModel.ProductDeal.findById(productData.deals[J]);
+      const dealData = await indexModel.ProductDeal.findById(
+        productData.deals[J]
+      );
 
       if (
         !flag &&
@@ -79,7 +85,9 @@ const getOneProduct = asyncErrorHandler(async (req, res, next) => {
         productData = obj;
         flag = true;
       } else {
-        await indexModel.ProductDeal.findByIdAndUpdate(productData.deals[J], { deleted: true });
+        await indexModel.ProductDeal.findByIdAndUpdate(productData.deals[J], {
+          deleted: true,
+        });
       }
     }
   }
@@ -319,7 +327,11 @@ const addDeal = asyncErrorHandler(async (req, res, next) => {
     return next(err);
   }
 
-  const dealData = await indexModel.ProductDeal.create({ discount, ends, sellerId });
+  const dealData = await indexModel.ProductDeal.create({
+    discount,
+    ends,
+    sellerId,
+  });
 
   const addDealProduct = await indexModel.Product.findByIdAndUpdate(
     productId,
